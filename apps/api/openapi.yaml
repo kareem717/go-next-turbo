@@ -264,12 +264,12 @@ paths:
               $ref: "#/components/schemas/CreateAccountParams"
         required: true
       responses:
-        "201":
+        "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SingleAccountResponseBody"
-          description: Created
+          description: OK
         default:
           content:
             application/problem+json:
@@ -335,12 +335,12 @@ paths:
               $ref: "#/components/schemas/CreateProjectParams"
         required: true
       responses:
-        "201":
+        "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Project"
-          description: Created
+          description: OK
         default:
           content:
             application/problem+json:
