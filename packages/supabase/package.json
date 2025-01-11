@@ -3,13 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "db:sync": "bunx @snaplet/seed sync",
     "db:seed": "bunx tsx seed.ts",
-    "db:start": "source .env && supabase start",
-    "db:stop": "source .env && supabase stop",
-    "db:status": "source .env && supabase status",
-    "db:restart": "bun run db:stop && bun run db:start"
+    "db:start": "bunx dotenv -e .env.local supabase start",
+    "db:stop": "bunx dotenv -e .env.local supabase stop",
+    "db:status": "bunx dotenv -e .env.local supabase status",
+    "db:restart": "yarn run db:stop && yarn run db:start"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +18,7 @@
     "@snaplet/copycat": "^5.1.0",
     "@snaplet/seed": "^0.98.0",
     "@types/pg": "^8.11.10",
+    "dotenv-cli": "^8.0.0",
     "pg": "^8.13.1"
   }
 }

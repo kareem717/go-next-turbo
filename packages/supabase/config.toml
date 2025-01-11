@@ -137,7 +137,6 @@ backend = "postgres"
 [db.seed]
 enabled = false
 
-
 # Optional SMTP configuration
 # [auth.email.smtp]
 # enabled = true
