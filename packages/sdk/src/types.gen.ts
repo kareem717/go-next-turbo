@@ -183,9 +183,9 @@ export type CreateAccountError = CreateAccountErrors[keyof CreateAccountErrors];
 
 export type CreateAccountResponses = {
   /**
-   * Created
+   * OK
    */
-  201: SingleAccountResponseBody;
+  200: SingleAccountResponseBody;
 };
 
 export type CreateAccountResponse =
@@ -261,9 +261,9 @@ export type CreateProjectError = CreateProjectErrors[keyof CreateProjectErrors];
 
 export type CreateProjectResponses = {
   /**
-   * Created
+   * OK
    */
-  201: Project;
+  200: Project;
 };
 
 export type CreateProjectResponse =
