@@ -7,6 +7,12 @@ export const zAccount = z.object({
   id: z.number().int().gte(1),
   updated_at: z.union([z.string().datetime(), z.null()]),
   user_id: z.string(),
+  username: z.string().min(3).max(50),
+});
+
+export const zCreateAccountParams = z.object({
+  $schema: z.string().url().readonly().optional(),
+  username: z.string().min(3).max(50),
 });
 
 export const zCreateProjectParams = z.object({
@@ -49,6 +55,11 @@ export const zSingleAccountResponseBody = z.object({
   account: zAccount,
 });
 
+export const zUpdateAccountParams = z.object({
+  $schema: z.string().url().readonly().optional(),
+  username: z.string().min(3).max(50),
+});
+
 export const zUpdateProjectParams = z.object({
   $schema: z.string().url().readonly().optional(),
   name: z.string().min(1).max(60),
@@ -59,6 +70,8 @@ export const zDeleteAccountResponse = z.void();
 export const zGetAccountResponse = zSingleAccountResponseBody;
 
 export const zCreateAccountResponse = zSingleAccountResponseBody;
+
+export const zUpdateAccountResponse = z.void();
 
 export const zHealthCheckResponse = zHealthCheckOutputBody;
 

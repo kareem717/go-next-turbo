@@ -15,7 +15,8 @@ import (
 )
 
 type AccountService interface {
-	Create(ctx context.Context, userId uuid.UUID) (account.Account, error)
+	Create(ctx context.Context, userId uuid.UUID, params account.CreateAccountParams) (account.Account, error)
+	Update(ctx context.Context, accountId int32, params account.UpdateAccountParams) error
 	Delete(ctx context.Context, accountId int32) error
 	GetById(ctx context.Context, accountId int32) (account.Account, error)
 

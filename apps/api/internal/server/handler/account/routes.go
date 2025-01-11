@@ -26,7 +26,6 @@ func RegisterHumaRoutes(
 		Summary:       "Create an account",
 		Description:   "Creates an account for the currently authenticated user.",
 		Tags:          []string{"Accounts"},
-		DefaultStatus: http.StatusCreated,
 		Security: []map[string][]string{
 			{"bearerAuth": {}},
 		},
@@ -76,4 +75,24 @@ func RegisterHumaRoutes(
 			},
 		},
 	}, handler.delete)
+
+	huma.Register(humaApi, huma.Operation{
+		OperationID: "updateAccount",
+		Method:      http.MethodPut,
+		Path:        "/accounts",
+		Summary:     "Update your account",
+		Description: "Updates the account for the currently authenticated user.",
+		Tags:        []string{"Accounts"},
+		Security: []map[string][]string{
+			{"bearerAuth": {}},
+		},
+		Middlewares: huma.Middlewares{
+			func(ctx huma.Context, next func(huma.Context)) {
+				middleware.WithUser(humaApi)(ctx, next, logger, supabaseClient)
+			},
+			func(ctx huma.Context, next func(huma.Context)) {
+				middleware.WithAccount(humaApi)(ctx, next, logger, service)
+			},
+		},
+	}, handler.update)
 }

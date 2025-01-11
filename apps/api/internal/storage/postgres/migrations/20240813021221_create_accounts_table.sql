@@ -4,6 +4,7 @@ CREATE TABLE
     accounts (
         id SERIAL PRIMARY KEY,
         user_id UUID REFERENCES auth.users (id) NOT NULL,
+        username VARCHAR(50) NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE
     );

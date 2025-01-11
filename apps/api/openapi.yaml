@@ -16,11 +16,32 @@ components:
           type: string
         user_id:
           type: string
+        username:
+          maxLength: 50
+          minLength: 3
+          type: string
       required:
         - user_id
         - id
+        - username
         - created_at
         - updated_at
+      type: object
+    CreateAccountParams:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/CreateAccountParams.json
+          format: uri
+          readOnly: true
+          type: string
+        username:
+          maxLength: 50
+          minLength: 3
+          type: string
+      required:
+        - username
       type: object
     CreateProjectParams:
       additionalProperties: false
@@ -152,6 +173,22 @@ components:
       required:
         - account
       type: object
+    UpdateAccountParams:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/UpdateAccountParams.json
+          format: uri
+          readOnly: true
+          type: string
+        username:
+          maxLength: 50
+          minLength: 3
+          type: string
+      required:
+        - username
+      type: object
     UpdateProjectParams:
       additionalProperties: false
       properties:
@@ -220,6 +257,12 @@ paths:
     post:
       description: Creates an account for the currently authenticated user.
       operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAccountParams"
+        required: true
       responses:
         "201":
           content:
@@ -236,6 +279,29 @@ paths:
       security:
         - bearerAuth: []
       summary: Create an account
+      tags:
+        - Accounts
+    put:
+      description: Updates the account for the currently authenticated user.
+      operationId: updateAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAccountParams"
+        required: true
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Update your account
       tags:
         - Accounts
   /health:

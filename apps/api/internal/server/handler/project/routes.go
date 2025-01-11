@@ -26,7 +26,6 @@ func RegisterHumaRoutes(
 		Summary:       "Create a project",
 		Description:   "Creates a project for the currently authenticated account.",
 		Tags:          []string{"Projects"},
-		DefaultStatus: http.StatusCreated,
 		Security: []map[string][]string{
 			{"bearerAuth": {}},
 		},

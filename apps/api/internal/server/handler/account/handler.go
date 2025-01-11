@@ -72,7 +72,11 @@ func (h *accountHandler) getByUserId(ctx context.Context, input *struct{}) (*sin
 	return resp, nil
 }
 
-func (h *accountHandler) create(ctx context.Context, input *struct{}) (*singleAccountResponse, error) {
+type createAccountRequest struct {
+	Body account.CreateAccountParams
+}
+
+func (h *accountHandler) create(ctx context.Context, input *createAccountRequest) (*singleAccountResponse, error) {
 	user := utils.GetAuthenticatedUser(ctx)
 	if user == nil {
 		return nil, huma.Error401Unauthorized("Unauthorized")
@@ -88,7 +92,7 @@ func (h *accountHandler) create(ctx context.Context, input *struct{}) (*singleAc
 		return nil, huma.Error403Forbidden("You are not authorized to create an account")
 	}
 
-	account, err := h.service.AccountService.Create(ctx, user.ID)
+	account, err := h.service.AccountService.Create(ctx, user.ID, input.Body)
 	if err != nil {
 		h.logger.Error("failed to create account", zap.Error(err))
 		return nil, huma.Error500InternalServerError("An error occurred while creating the account")
@@ -110,6 +114,25 @@ func (h *accountHandler) delete(ctx context.Context, input *struct{}) (*struct{}
 	if err != nil {
 		h.logger.Error("failed to delete account", zap.Error(err))
 		return nil, huma.Error500InternalServerError("An error occurred while deleting the account")
+	}
+
+	return &struct{}{}, nil
+}
+
+type updateAccountRequest struct {
+	Body  account.UpdateAccountParams
+}
+
+func (h *accountHandler) update(ctx context.Context, input *updateAccountRequest) (*struct{}, error) {
+	account := utils.GetAuthenticatedAccount(ctx)
+	if account == nil {
+		return nil, huma.Error401Unauthorized("Unauthorized")
+	}
+
+	err := h.service.AccountService.Update(ctx, account.ID, input.Body)
+	if err != nil {
+		h.logger.Error("failed to update account", zap.Error(err))
+		return nil, huma.Error500InternalServerError("An error occurred while updating the account")
 	}
 
 	return &struct{}{}, nil

@@ -5,6 +5,15 @@ export type Account = {
   id: number;
   updated_at: string | null;
   user_id: string;
+  username: string;
+};
+
+export type CreateAccountParams = {
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  readonly $schema?: string;
+  username: string;
 };
 
 export type CreateProjectParams = {
@@ -89,6 +98,14 @@ export type SingleAccountResponseBody = {
   account: Account;
 };
 
+export type UpdateAccountParams = {
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  readonly $schema?: string;
+  username: string;
+};
+
 export type UpdateProjectParams = {
   /**
    * A URL to the JSON Schema for this object.
@@ -149,7 +166,7 @@ export type GetAccountResponses = {
 export type GetAccountResponse = GetAccountResponses[keyof GetAccountResponses];
 
 export type CreateAccountData = {
-  body?: never;
+  body: CreateAccountParams;
   path?: never;
   query?: never;
   url: "/accounts";
@@ -173,6 +190,32 @@ export type CreateAccountResponses = {
 
 export type CreateAccountResponse =
   CreateAccountResponses[keyof CreateAccountResponses];
+
+export type UpdateAccountData = {
+  body: UpdateAccountParams;
+  path?: never;
+  query?: never;
+  url: "/accounts";
+};
+
+export type UpdateAccountErrors = {
+  /**
+   * Error
+   */
+  default: ErrorModel;
+};
+
+export type UpdateAccountError = UpdateAccountErrors[keyof UpdateAccountErrors];
+
+export type UpdateAccountResponses = {
+  /**
+   * No Content
+   */
+  204: void;
+};
+
+export type UpdateAccountResponse =
+  UpdateAccountResponses[keyof UpdateAccountResponses];
 
 export type HealthCheckData = {
   body?: never;

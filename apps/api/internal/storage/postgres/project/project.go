@@ -25,7 +25,7 @@ func (r *ProjectRepository) Create(ctx context.Context, ownerId int32, params pr
 
 	err := r.db.
 		NewInsert().
-		Model(params).
+		Model(&params).
 		Value("owner_id", "?", ownerId).
 		Scan(ctx, &resp)
 
@@ -47,7 +47,8 @@ func (r *ProjectRepository) GetById(ctx context.Context, id int32) (project.Proj
 func (r *ProjectRepository) Update(ctx context.Context, id int32, params project.UpdateProjectParams) error {
 	_, err := r.db.
 		NewUpdate().
-		Model(params).
+		Model(&params).
+		OmitZero().
 		Where("id = ?", id).
 		Exec(ctx)
 

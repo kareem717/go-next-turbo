@@ -10,7 +10,8 @@ import (
 )
 
 type AccountRepository interface {
-	Create(ctx context.Context, userId uuid.UUID) (account.Account, error)
+	Create(ctx context.Context, userId uuid.UUID, params account.CreateAccountParams) (account.Account, error)
+	Update(ctx context.Context, id int32, params account.UpdateAccountParams) error
 	GetById(ctx context.Context, id int32) (account.Account, error)
 	Delete(ctx context.Context, id int32) error
 

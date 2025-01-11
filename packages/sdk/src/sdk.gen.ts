@@ -15,6 +15,9 @@ import type {
   CreateAccountData,
   CreateAccountResponse,
   CreateAccountError,
+  UpdateAccountData,
+  UpdateAccountResponse,
+  UpdateAccountError,
   HealthCheckData,
   HealthCheckResponse,
   HealthCheckError,
@@ -88,7 +91,7 @@ export const getAccount = <ThrowOnError extends boolean = false>(
  * Creates an account for the currently authenticated user.
  */
 export const createAccount = <ThrowOnError extends boolean = false>(
-  options?: Options<CreateAccountData, ThrowOnError>,
+  options: Options<CreateAccountData, ThrowOnError>,
 ) => {
   return (options?.client ?? client).post<
     CreateAccountResponse,
@@ -96,6 +99,37 @@ export const createAccount = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/accounts",
+  });
+};
+
+/**
+ * Update your account
+ * Updates the account for the currently authenticated user.
+ */
+export const updateAccount = <ThrowOnError extends boolean = false>(
+  options: Options<UpdateAccountData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).put<
+    UpdateAccountResponse,
+    UpdateAccountError,
+    ThrowOnError
+  >({
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
     security: [
       {
         scheme: "bearer",

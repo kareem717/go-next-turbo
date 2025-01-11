@@ -21,12 +21,12 @@ func New(ctx context.Context, db bun.IDB) *AccountRepository {
 	}
 }
 
-func (r *AccountRepository) Create(ctx context.Context, userId uuid.UUID) (account.Account, error) {
+func (r *AccountRepository) Create(ctx context.Context, userId uuid.UUID, params account.CreateAccountParams) (account.Account, error) {
 	resp := account.Account{}
 
 	err := r.db.
 		NewInsert().
-		Model((*account.Account)(nil)).
+		Model(&params).
 		Value("user_id", "?", userId).
 		Scan(ctx, &resp)
 
@@ -62,6 +62,17 @@ func (r *AccountRepository) Delete(ctx context.Context, accountId int32) error {
 		NewDelete().
 		Model((*account.Account)(nil)).
 		Where("id = ?", accountId).
+		Exec(ctx)
+
+	return err
+}
+
+func (r *AccountRepository) Update(ctx context.Context, id int32, params account.UpdateAccountParams) error {
+	_, err := r.db.
+		NewUpdate().
+		Model(&params).
+		OmitZero().
+		Where("id = ?", id).
 		Exec(ctx)
 
 	return err

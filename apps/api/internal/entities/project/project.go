@@ -16,9 +16,13 @@ type Project struct {
 }
 
 type CreateProjectParams struct {
+	bun.BaseModel `bun:"table:projects"`
+
 	NameField
 }
 
 type UpdateProjectParams struct {
-	NameField
+	bun.BaseModel `bun:"table:projects"`
+
+	*NameField
 }

@@ -27,10 +27,14 @@ func (s *AccountService) GetByUserId(ctx context.Context, userId uuid.UUID) (acc
 	return s.repositories.Account().GetByUserId(ctx, userId)
 }
 
-func (s *AccountService) Create(ctx context.Context, userId uuid.UUID) (account.Account, error) {
-	return s.repositories.Account().Create(ctx, userId)
+func (s *AccountService) Create(ctx context.Context, userId uuid.UUID, params account.CreateAccountParams) (account.Account, error) {
+	return s.repositories.Account().Create(ctx, userId, params)
 }
 
 func (s *AccountService) Delete(ctx context.Context, id int32) error {
 	return s.repositories.Account().Delete(ctx, id)
+}
+
+func (s *AccountService) Update(ctx context.Context, id int32, params account.UpdateAccountParams) error {
+	return s.repositories.Account().Update(ctx, id, params)
 }
