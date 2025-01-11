@@ -19,7 +19,9 @@
     "db:restart": "turbo run db:restart",
     "db:sync": "turbo run db:sync",
     "db:seed": "turbo run db:seed",
-    "openapi:gen": "turbo run openapi:gen"
+    "openapi:gen": "turbo run openapi:gen",
+    "sdk:gen": "turbo run sdk:gen",
+    "sdk:full": "turbo run openapi:gen && turbo run sdk:gen"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
