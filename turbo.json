@@ -3,6 +3,7 @@
   "ui": "tui",
   "tasks": {
     "build": {
+      "cache": false,
       "dependsOn": [
         "^build"
       ],
@@ -11,8 +12,10 @@
         ".env*"
       ],
       "outputs": [
+        "dist/**/*",
         ".next/**",
-        "!.next/cache/**"
+        "!.next/cache/**",
+        "bin/*"
       ]
     },
     "lint": {
@@ -20,14 +23,23 @@
         "^lint"
       ]
     },
-    "check-types": {
-      "dependsOn": [
-        "^check-types"
-      ]
-    },
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [
+        "build",
+        "^build"
+      ]
+    },
+    "install": {
+      "cache": false,
+      "dependsOn": [
+        "^install"
+      ]
     },
     "db:sync": {
       "cache": false,
@@ -39,6 +51,12 @@
       "cache": false,
       "dependsOn": [
         "^db:seed"
+      ]
+    },
+    "test": {
+      "cache": false,
+      "dependsOn": [
+        "^test"
       ]
     },
     "db:start": {
@@ -63,6 +81,39 @@
       "cache": false,
       "dependsOn": [
         "^db:restart"
+      ]
+    },
+    "db:up": {
+      "cache": false,
+      "dependsOn": [
+        "^db:up"
+      ]
+    },
+    "db:up-one": {
+      "cache": false,
+      "dependsOn": [
+        "^db:up-one"
+      ]
+    },
+    "db:down": {
+      "cache": false,
+      "dependsOn": [
+        "^db:down"
+      ]
+    },
+    "db:reset": {
+      "cache": false,
+      "dependsOn": [
+        "^db:reset"
+      ]
+    },
+    "openapi:gen": {
+      "cache": false,
+      "dependsOn": [
+        "^openapi:gen"
+      ],
+      "outputs": [
+        "openapi.yaml"
       ]
     }
   }

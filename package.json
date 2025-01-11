@@ -1,17 +1,25 @@
 {
-  "name": "go-next-turbo",
+  "name": "project",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build && turbo run openapi:gen && turbo run sdk:gen",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "start": "turbo run start",
+    "test": "turbo run test",
+    "install": "turbo run install",
     "db:reset": "turbo run db:reset",
+    "db:up": "turbo run db:up",
+    "db:up-one": "turbo run db:up-one",
+    "db:down": "turbo run db:down",
     "db:start": "turbo run db:start",
     "db:stop": "turbo run db:stop",
     "db:status": "turbo run db:status",
+    "db:restart": "turbo run db:restart",
     "db:sync": "turbo run db:sync",
-    "db:seed": "turbo run db:seed"
+    "db:seed": "turbo run db:seed",
+    "openapi:gen": "turbo run openapi:gen"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
