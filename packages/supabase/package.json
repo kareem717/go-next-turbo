@@ -1,0 +1,24 @@
+{
+  "name": "supabase",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:sync": "bunx @snaplet/seed sync",
+    "db:seed": "bunx tsx seed.ts",
+    "db:start": "source .env && supabase start",
+    "db:stop": "source .env && supabase stop",
+    "db:status": "source .env && supabase status",
+    "db:restart": "bun run db:stop && bun run db:start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@snaplet/copycat": "^5.1.0",
+    "@snaplet/seed": "^0.98.0",
+    "@types/pg": "^8.11.10",
+    "pg": "^8.13.1"
+  }
+}

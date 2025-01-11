@@ -1,0 +1,4 @@
+{
+  "adapter": "pg",
+  "projectDescription": "This project is about a platform that manages various business operations, user accounts, chat functionalities, and investment rounds, likely in a venture capital or crowdfunding context. It includes tracking businesses, user identities, and interactions, as well as handling authentication and authorization processes. Data analytics appears to be a significant aspect, with daily aggregations for business and venture performance."
+}
