@@ -5,7 +5,13 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:reset": "turbo run db:reset",
+    "db:start": "turbo run db:start",
+    "db:stop": "turbo run db:stop",
+    "db:status": "turbo run db:status",
+    "db:sync": "turbo run db:sync",
+    "db:seed": "turbo run db:seed"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

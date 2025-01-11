@@ -3,19 +3,67 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": [
+        "^check-types"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "db:sync": {
+      "cache": false,
+      "dependsOn": [
+        "^db:sync"
+      ]
+    },
+    "db:seed": {
+      "cache": false,
+      "dependsOn": [
+        "^db:seed"
+      ]
+    },
+    "db:start": {
+      "cache": false,
+      "dependsOn": [
+        "^db:start"
+      ]
+    },
+    "db:stop": {
+      "cache": false,
+      "dependsOn": [
+        "^db:stop"
+      ]
+    },
+    "db:status": {
+      "cache": false,
+      "dependsOn": [
+        "^db:status"
+      ]
+    },
+    "db:restart": {
+      "cache": false,
+      "dependsOn": [
+        "^db:restart"
+      ]
     }
   }
 }
