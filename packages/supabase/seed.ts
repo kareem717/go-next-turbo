@@ -12,12 +12,15 @@ const main = async () => {
 	// Truncate all tables in the database
 	// await seed.$resetDatabase();
 
-	await seed.accounts((x) =>
-		x(
-			{ min: 5, max: 15 },
+	await seed.users(
+		(x) => (
+			{ min: 1, max: 10 },
 			{
-				updated_at: null,
-				projects: (x) => x({ min: 1, max: 10 }, { updated_at: null }),
+				accounts: (x) =>
+					x(1, {
+						updated_at: null,
+						projects: (x) => x({ min: 1, max: 10 }, { updated_at: null }),
+					}),
 			}
 		)
 	);

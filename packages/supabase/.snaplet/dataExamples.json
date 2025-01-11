@@ -1,5 +1,31 @@
 [
   {
+    "input": "public accounts username",
+    "examples": [
+      "techie_tom",
+      "investor_anna",
+      "crowdfund_kate",
+      "venture_ace22",
+      "startup_sam",
+      "equity_enthusiast",
+      "money_maven",
+      "angel_investor_2023",
+      "business_bob",
+      "capital_crafter",
+      "funding_fred",
+      "risk_taker_ryan",
+      "portfolio_paul",
+      "investwise_jess",
+      "growth_guru",
+      "finance_fiona",
+      "strategist_sue",
+      "immediate_investor",
+      "venture_victor",
+      "fund_flower"
+    ],
+    "description": "This column contains the usernames of the users registered on the platform, serving as unique identifiers for each user account. These usernames are essential for user authentication, enabling users to log in and interact with various business operations, chat functionalities, and investment rounds within the platform. They also facilitate tracking user identities and interactions in the context of venture capital or crowdfunding activities."
+  },
+  {
     "input": "public projects name",
     "examples": [
       "EcoTech Sustainable Solutions",
