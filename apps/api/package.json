@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "air -c .air.toml",
+    "build": "go build -o bin/main main.go",
+    "start": "./bin/main",
+    "test": "go test ./... -v",
+    "install": "go get ./... && go mod vendor && go mod tidy && go mod download",
+    "db:up": "source .env.local && GOOSE_DRIVER=$GOOSE_DRIVER GOOSE_DBSTRING=$DATABASE_URL goose -dir=$GOOSE_MIGRATIONS_PATH up",
+    "db:up-one": "source .env.local && GOOSE_DRIVER=$GOOSE_DRIVER GOOSE_DBSTRING=$DATABASE_URL goose -dir=$GOOSE_MIGRATIONS_PATH up-by-one",
+    "db:down": "source .env.local && GOOSE_DRIVER=$GOOSE_DRIVER GOOSE_DBSTRING=$DATABASE_URL goose -dir=$GOOSE_MIGRATIONS_PATH down",
+    "db:reset": "source .env.local && GOOSE_DRIVER=$GOOSE_DRIVER GOOSE_DBSTRING=$DATABASE_URL goose -dir=$GOOSE_MIGRATIONS_PATH reset",
+    "db:status": "source .env.local && GOOSE_DRIVER=$GOOSE_DRIVER GOOSE_DBSTRING=$DATABASE_URL goose -dir=$GOOSE_MIGRATIONS_PATH status",
+    "openapi:gen": "yarn build && ./bin/main -H openapi"
+  }
+}

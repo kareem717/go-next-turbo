@@ -1,0 +1,352 @@
+components:
+  schemas:
+    Account:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          type: string
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        updated_at:
+          format: date-time
+          nullable: true
+          type: string
+        user_id:
+          type: string
+      required:
+        - user_id
+        - id
+        - created_at
+        - updated_at
+      type: object
+    ErrorDetail:
+      additionalProperties: false
+      properties:
+        location:
+          description: Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'
+          type: string
+        message:
+          description: Error message text
+          type: string
+        value:
+          description: The value at the given location
+      type: object
+    ErrorModel:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/ErrorModel.json
+          format: uri
+          readOnly: true
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          example: Property foo is required but is missing.
+          type: string
+        errors:
+          description: Optional list of individual error details
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
+          nullable: true
+          type: array
+        instance:
+          description: A URI reference that identifies the specific occurrence of the problem.
+          example: https://example.com/error-log/abc123
+          format: uri
+          type: string
+        status:
+          description: HTTP status code
+          example: 400
+          format: int64
+          type: integer
+        title:
+          description: A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+          example: Bad Request
+          type: string
+        type:
+          default: about:blank
+          description: A URI reference to human-readable documentation for the error.
+          example: https://example.com/errors/example
+          format: uri
+          type: string
+      type: object
+    HealthCheckOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/HealthCheckOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        message:
+          type: string
+      required:
+        - message
+      type: object
+    MultipleProjectResponseBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/MultipleProjectResponseBody.json
+          format: uri
+          readOnly: true
+          type: string
+        projects:
+          items:
+            $ref: "#/components/schemas/Project"
+          nullable: true
+          type: array
+      required:
+        - projects
+      type: object
+    Project:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          type: string
+        id:
+          format: int32
+          minimum: 1
+          type: integer
+        name:
+          maxLength: 60
+          minLength: 1
+          type: string
+        owner_id:
+          format: int32
+          type: integer
+        updated_at:
+          format: date-time
+          nullable: true
+          type: string
+      required:
+        - owner_id
+        - id
+        - name
+        - created_at
+        - updated_at
+      type: object
+    SingleAccountResponseBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/SingleAccountResponseBody.json
+          format: uri
+          readOnly: true
+          type: string
+        account:
+          $ref: "#/components/schemas/Account"
+      required:
+        - account
+      type: object
+    SingleProjectResponseBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/SingleProjectResponseBody.json
+          format: uri
+          readOnly: true
+          type: string
+        project:
+          $ref: "#/components/schemas/Project"
+      required:
+        - project
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+info:
+  title: ""
+  version: ""
+openapi: 3.0.3
+paths:
+  /account:
+    delete:
+      description: Deletes the account for the currently authenticated user.
+      operationId: deleteAccount
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Delete your account
+      tags:
+        - Accounts
+    get:
+      description: Fetches the account for the currently authenticated user.
+      operationId: getAccount
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleAccountResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Get your account
+      tags:
+        - Account
+    post:
+      description: Creates an account for the currently authenticated user.
+      operationId: createAccount
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleAccountResponseBody"
+          description: Created
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Create an account
+      tags:
+        - Accounts
+  /health:
+    get:
+      description: Health check.
+      operationId: health-check
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthCheckOutputBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Health check
+      tags:
+        - Health
+  /project:
+    get:
+      description: Fetches all projects owned by the currently authenticated account.
+      operationId: getProjectsByOwnerId
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MultipleProjectResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Get a project by owner id
+      tags:
+        - Projects
+    post:
+      description: Creates a project for the currently authenticated account.
+      operationId: createProject
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleProjectResponseBody"
+          description: Created
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Create a project
+      tags:
+        - Projects
+  /project/{id}:
+    delete:
+      description: Deletes a project by its id.
+      operationId: deleteProject
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Delete a project
+      tags:
+        - Projects
+    get:
+      description: Fetches a project by its id.
+      operationId: getProjectById
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleProjectResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Get a project by id
+      tags:
+        - Projects
+    put:
+      description: Updates a project using its id as an identifier.
+      operationId: updateProject
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Update a project
+      tags:
+        - Projects
