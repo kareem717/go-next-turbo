@@ -18,12 +18,12 @@ import type {
   HealthCheckData,
   HealthCheckResponse,
   HealthCheckError,
-  GetProjectsByOwnerIdData,
-  GetProjectsByOwnerIdResponse,
-  GetProjectsByOwnerIdError,
   CreateProjectData,
   CreateProjectResponse,
   CreateProjectError,
+  GetAccountProjectsData,
+  GetAccountProjectsResponse,
+  GetAccountProjectsError,
   DeleteProjectData,
   DeleteProjectResponse,
   DeleteProjectError,
@@ -56,7 +56,7 @@ export const deleteAccount = <ThrowOnError extends boolean = false>(
         type: "http",
       },
     ],
-    url: "/account",
+    url: "/accounts",
   });
 };
 
@@ -79,7 +79,7 @@ export const getAccount = <ThrowOnError extends boolean = false>(
         type: "http",
       },
     ],
-    url: "/account",
+    url: "/accounts",
   });
 };
 
@@ -102,7 +102,7 @@ export const createAccount = <ThrowOnError extends boolean = false>(
         type: "http",
       },
     ],
-    url: "/account",
+    url: "/accounts",
   });
 };
 
@@ -124,18 +124,22 @@ export const healthCheck = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * Get a project by owner id
- * Fetches all projects owned by the currently authenticated account.
+ * Create a project
+ * Creates a project for the currently authenticated account.
  */
-export const getProjectsByOwnerId = <ThrowOnError extends boolean = false>(
-  options?: Options<GetProjectsByOwnerIdData, ThrowOnError>,
+export const createProject = <ThrowOnError extends boolean = false>(
+  options: Options<CreateProjectData, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<
-    GetProjectsByOwnerIdResponse,
-    GetProjectsByOwnerIdError,
+  return (options?.client ?? client).post<
+    CreateProjectResponse,
+    CreateProjectError,
     ThrowOnError
   >({
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
     security: [
       {
         scheme: "bearer",
@@ -147,15 +151,15 @@ export const getProjectsByOwnerId = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * Create a project
- * Creates a project for the currently authenticated account.
+ * Get all account projects
+ * Fetches all projects owned by the currently authenticated account.
  */
-export const createProject = <ThrowOnError extends boolean = false>(
-  options?: Options<CreateProjectData, ThrowOnError>,
+export const getAccountProjects = <ThrowOnError extends boolean = false>(
+  options?: Options<GetAccountProjectsData, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<
-    CreateProjectResponse,
-    CreateProjectError,
+  return (options?.client ?? client).get<
+    GetAccountProjectsResponse,
+    GetAccountProjectsError,
     ThrowOnError
   >({
     ...options,
@@ -165,7 +169,7 @@ export const createProject = <ThrowOnError extends boolean = false>(
         type: "http",
       },
     ],
-    url: "/project",
+    url: "/projects",
   });
 };
 
@@ -174,7 +178,7 @@ export const createProject = <ThrowOnError extends boolean = false>(
  * Deletes a project by its id.
  */
 export const deleteProject = <ThrowOnError extends boolean = false>(
-  options?: Options<DeleteProjectData, ThrowOnError>,
+  options: Options<DeleteProjectData, ThrowOnError>,
 ) => {
   return (options?.client ?? client).delete<
     DeleteProjectResponse,
@@ -188,7 +192,7 @@ export const deleteProject = <ThrowOnError extends boolean = false>(
         type: "http",
       },
     ],
-    url: "/project/{id}",
+    url: "/projects/{id}",
   });
 };
 
@@ -197,7 +201,7 @@ export const deleteProject = <ThrowOnError extends boolean = false>(
  * Fetches a project by its id.
  */
 export const getProjectById = <ThrowOnError extends boolean = false>(
-  options?: Options<GetProjectByIdData, ThrowOnError>,
+  options: Options<GetProjectByIdData, ThrowOnError>,
 ) => {
   return (options?.client ?? client).get<
     GetProjectByIdResponse,
@@ -211,7 +215,7 @@ export const getProjectById = <ThrowOnError extends boolean = false>(
         type: "http",
       },
     ],
-    url: "/project/{id}",
+    url: "/projects/{id}",
   });
 };
 
@@ -220,7 +224,7 @@ export const getProjectById = <ThrowOnError extends boolean = false>(
  * Updates a project using its id as an identifier.
  */
 export const updateProject = <ThrowOnError extends boolean = false>(
-  options?: Options<UpdateProjectData, ThrowOnError>,
+  options: Options<UpdateProjectData, ThrowOnError>,
 ) => {
   return (options?.client ?? client).put<
     UpdateProjectResponse,
@@ -228,12 +232,16 @@ export const updateProject = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
     security: [
       {
         scheme: "bearer",
         type: "http",
       },
     ],
-    url: "/project/{id}",
+    url: "/projects/{id}",
   });
 };

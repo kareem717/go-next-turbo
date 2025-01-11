@@ -43,7 +43,7 @@ func RegisterHumaRoutes(
 	huma.Register(humaApi, huma.Operation{
 		OperationID: "getProjectById",
 		Method:      http.MethodGet,
-		Path:        "/project/{id}",
+		Path:        "/projects/{id}",
 		Summary:     "Get a project by id",
 		Description: "Fetches a project by its id.",
 		Tags:        []string{"Projects"},
@@ -63,7 +63,7 @@ func RegisterHumaRoutes(
 	huma.Register(humaApi, huma.Operation{
 		OperationID: "updateProject",
 		Method:      http.MethodPut,
-		Path:        "/project/{id}",
+		Path:        "/projects/{id}",
 		Summary:     "Update a project",
 		Description: "Updates a project using its id as an identifier.",
 		Tags:        []string{"Projects"},
@@ -83,7 +83,7 @@ func RegisterHumaRoutes(
 	huma.Register(humaApi, huma.Operation{
 		OperationID: "deleteProject",
 		Method:      http.MethodDelete,
-		Path:        "/project/{id}",
+		Path:        "/projects/{id}",
 		Summary:     "Delete a project",
 		Description: "Deletes a project by its id.",
 		Tags:        []string{"Projects"},
@@ -101,10 +101,10 @@ func RegisterHumaRoutes(
 	}, handler.delete)
 
 	huma.Register(humaApi, huma.Operation{
-		OperationID: "getProjectsByOwnerId",
+		OperationID: "getAccountProjects",
 		Method:      http.MethodGet,
-		Path:        "/project",
-		Summary:     "Get a project by owner id",
+		Path:        "/projects",
+		Summary:     "Get all account projects",
 		Description: "Fetches all projects owned by the currently authenticated account.",
 		Tags:        []string{"Projects"},
 		Security: []map[string][]string{

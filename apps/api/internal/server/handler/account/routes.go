@@ -22,7 +22,7 @@ func RegisterHumaRoutes(
 	huma.Register(humaApi, huma.Operation{
 		OperationID:   "createAccount",
 		Method:        http.MethodPost,
-		Path:          "/account",
+		Path:          "/accounts",
 		Summary:       "Create an account",
 		Description:   "Creates an account for the currently authenticated user.",
 		Tags:          []string{"Accounts"},
@@ -40,7 +40,7 @@ func RegisterHumaRoutes(
 	huma.Register(humaApi, huma.Operation{
 		OperationID: "getAccount",
 		Method:      http.MethodGet,
-		Path:        "/account",
+		Path:        "/accounts",
 		Summary:     "Get your account",
 		Description: "Fetches the account for the currently authenticated user.",
 		Tags:        []string{"Account"},
@@ -60,7 +60,7 @@ func RegisterHumaRoutes(
 	huma.Register(humaApi, huma.Operation{
 		OperationID: "deleteAccount",
 		Method:      http.MethodDelete,
-		Path:        "/account",
+		Path:        "/accounts",
 		Summary:     "Delete your account",
 		Description: "Deletes the account for the currently authenticated user.",
 		Tags:        []string{"Accounts"},

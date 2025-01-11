@@ -22,6 +22,22 @@ components:
         - created_at
         - updated_at
       type: object
+    CreateProjectParams:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          example: https://example.com/schemas/CreateProjectParams.json
+          format: uri
+          readOnly: true
+          type: string
+        name:
+          maxLength: 60
+          minLength: 1
+          type: string
+      required:
+        - name
+      type: object
     ErrorDetail:
       additionalProperties: false
       properties:
@@ -88,26 +104,15 @@ components:
       required:
         - message
       type: object
-    MultipleProjectResponseBody:
+    Project:
       additionalProperties: false
       properties:
         $schema:
           description: A URL to the JSON Schema for this object.
-          example: https://example.com/schemas/MultipleProjectResponseBody.json
+          example: https://example.com/schemas/Project.json
           format: uri
           readOnly: true
           type: string
-        projects:
-          items:
-            $ref: "#/components/schemas/Project"
-          nullable: true
-          type: array
-      required:
-        - projects
-      type: object
-    Project:
-      additionalProperties: false
-      properties:
         created_at:
           format: date-time
           type: string
@@ -147,19 +152,21 @@ components:
       required:
         - account
       type: object
-    SingleProjectResponseBody:
+    UpdateProjectParams:
       additionalProperties: false
       properties:
         $schema:
           description: A URL to the JSON Schema for this object.
-          example: https://example.com/schemas/SingleProjectResponseBody.json
+          example: https://example.com/schemas/UpdateProjectParams.json
           format: uri
           readOnly: true
           type: string
-        project:
-          $ref: "#/components/schemas/Project"
+        name:
+          maxLength: 60
+          minLength: 1
+          type: string
       required:
-        - project
+        - name
       type: object
   securitySchemes:
     bearerAuth:
@@ -171,7 +178,7 @@ info:
   version: ""
 openapi: 3.0.3
 paths:
-  /account:
+  /accounts:
     delete:
       description: Deletes the account for the currently authenticated user.
       operationId: deleteAccount
@@ -252,36 +259,21 @@ paths:
       tags:
         - Health
   /project:
-    get:
-      description: Fetches all projects owned by the currently authenticated account.
-      operationId: getProjectsByOwnerId
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MultipleProjectResponseBody"
-          description: OK
-        default:
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/ErrorModel"
-          description: Error
-      security:
-        - bearerAuth: []
-      summary: Get a project by owner id
-      tags:
-        - Projects
     post:
       description: Creates a project for the currently authenticated account.
       operationId: createProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectParams"
+        required: true
       responses:
         "201":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SingleProjectResponseBody"
+                $ref: "#/components/schemas/Project"
           description: Created
         default:
           content:
@@ -294,10 +286,42 @@ paths:
       summary: Create a project
       tags:
         - Projects
-  /project/{id}:
+  /projects:
+    get:
+      description: Fetches all projects owned by the currently authenticated account.
+      operationId: getAccountProjects
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Project"
+                nullable: true
+                type: array
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security:
+        - bearerAuth: []
+      summary: Get all account projects
+      tags:
+        - Projects
+  /projects/{id}:
     delete:
       description: Deletes a project by its id.
       operationId: deleteProject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
       responses:
         "204":
           description: No Content
@@ -315,12 +339,19 @@ paths:
     get:
       description: Fetches a project by its id.
       operationId: getProjectById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SingleProjectResponseBody"
+                $ref: "#/components/schemas/Project"
           description: OK
         default:
           content:
@@ -336,6 +367,19 @@ paths:
     put:
       description: Updates a project using its id as an identifier.
       operationId: updateProject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: int32
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProjectParams"
+        required: true
       responses:
         "204":
           description: No Content

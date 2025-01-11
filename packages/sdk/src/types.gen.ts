@@ -7,6 +7,14 @@ export type Account = {
   user_id: string;
 };
 
+export type CreateProjectParams = {
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  readonly $schema?: string;
+  name: string;
+};
+
 export type ErrorDetail = {
   /**
    * Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'
@@ -61,15 +69,11 @@ export type HealthCheckOutputBody = {
   message: string;
 };
 
-export type MultipleProjectResponseBody = {
+export type Project = {
   /**
    * A URL to the JSON Schema for this object.
    */
   readonly $schema?: string;
-  projects: Array<Project> | null;
-};
-
-export type Project = {
   created_at: string;
   id: number;
   name: string;
@@ -85,19 +89,19 @@ export type SingleAccountResponseBody = {
   account: Account;
 };
 
-export type SingleProjectResponseBody = {
+export type UpdateProjectParams = {
   /**
    * A URL to the JSON Schema for this object.
    */
   readonly $schema?: string;
-  project: Project;
+  name: string;
 };
 
 export type DeleteAccountData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/account";
+  url: "/accounts";
 };
 
 export type DeleteAccountErrors = {
@@ -123,7 +127,7 @@ export type GetAccountData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/account";
+  url: "/accounts";
 };
 
 export type GetAccountErrors = {
@@ -148,7 +152,7 @@ export type CreateAccountData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/account";
+  url: "/accounts";
 };
 
 export type CreateAccountErrors = {
@@ -196,35 +200,8 @@ export type HealthCheckResponses = {
 export type HealthCheckResponse =
   HealthCheckResponses[keyof HealthCheckResponses];
 
-export type GetProjectsByOwnerIdData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: "/project";
-};
-
-export type GetProjectsByOwnerIdErrors = {
-  /**
-   * Error
-   */
-  default: ErrorModel;
-};
-
-export type GetProjectsByOwnerIdError =
-  GetProjectsByOwnerIdErrors[keyof GetProjectsByOwnerIdErrors];
-
-export type GetProjectsByOwnerIdResponses = {
-  /**
-   * OK
-   */
-  200: MultipleProjectResponseBody;
-};
-
-export type GetProjectsByOwnerIdResponse =
-  GetProjectsByOwnerIdResponses[keyof GetProjectsByOwnerIdResponses];
-
 export type CreateProjectData = {
-  body?: never;
+  body: CreateProjectParams;
   path?: never;
   query?: never;
   url: "/project";
@@ -243,17 +220,46 @@ export type CreateProjectResponses = {
   /**
    * Created
    */
-  201: SingleProjectResponseBody;
+  201: Project;
 };
 
 export type CreateProjectResponse =
   CreateProjectResponses[keyof CreateProjectResponses];
 
-export type DeleteProjectData = {
+export type GetAccountProjectsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/project/{id}";
+  url: "/projects";
+};
+
+export type GetAccountProjectsErrors = {
+  /**
+   * Error
+   */
+  default: ErrorModel;
+};
+
+export type GetAccountProjectsError =
+  GetAccountProjectsErrors[keyof GetAccountProjectsErrors];
+
+export type GetAccountProjectsResponses = {
+  /**
+   * OK
+   */
+  200: Array<Project> | null;
+};
+
+export type GetAccountProjectsResponse =
+  GetAccountProjectsResponses[keyof GetAccountProjectsResponses];
+
+export type DeleteProjectData = {
+  body?: never;
+  path: {
+    id: number;
+  };
+  query?: never;
+  url: "/projects/{id}";
 };
 
 export type DeleteProjectErrors = {
@@ -277,9 +283,11 @@ export type DeleteProjectResponse =
 
 export type GetProjectByIdData = {
   body?: never;
-  path?: never;
+  path: {
+    id: number;
+  };
   query?: never;
-  url: "/project/{id}";
+  url: "/projects/{id}";
 };
 
 export type GetProjectByIdErrors = {
@@ -296,17 +304,19 @@ export type GetProjectByIdResponses = {
   /**
    * OK
    */
-  200: SingleProjectResponseBody;
+  200: Project;
 };
 
 export type GetProjectByIdResponse =
   GetProjectByIdResponses[keyof GetProjectByIdResponses];
 
 export type UpdateProjectData = {
-  body?: never;
-  path?: never;
+  body: UpdateProjectParams;
+  path: {
+    id: number;
+  };
   query?: never;
-  url: "/project/{id}";
+  url: "/projects/{id}";
 };
 
 export type UpdateProjectErrors = {

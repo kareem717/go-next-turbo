@@ -9,6 +9,11 @@ export const zAccount = z.object({
   user_id: z.string(),
 });
 
+export const zCreateProjectParams = z.object({
+  $schema: z.string().url().readonly().optional(),
+  name: z.string().min(1).max(60),
+});
+
 export const zErrorDetail = z.object({
   location: z.string().optional(),
   message: z.string().optional(),
@@ -30,23 +35,8 @@ export const zHealthCheckOutputBody = z.object({
   message: z.string(),
 });
 
-export const zMultipleProjectResponseBody = z.object({
-  $schema: z.string().url().readonly().optional(),
-  projects: z.union([
-    z.array(
-      z.object({
-        created_at: z.string().datetime(),
-        id: z.number().int().gte(1),
-        name: z.string().min(1).max(60),
-        owner_id: z.number().int(),
-        updated_at: z.union([z.string().datetime(), z.null()]),
-      }),
-    ),
-    z.null(),
-  ]),
-});
-
 export const zProject = z.object({
+  $schema: z.string().url().readonly().optional(),
   created_at: z.string().datetime(),
   id: z.number().int().gte(1),
   name: z.string().min(1).max(60),
@@ -59,9 +49,9 @@ export const zSingleAccountResponseBody = z.object({
   account: zAccount,
 });
 
-export const zSingleProjectResponseBody = z.object({
+export const zUpdateProjectParams = z.object({
   $schema: z.string().url().readonly().optional(),
-  project: zProject,
+  name: z.string().min(1).max(60),
 });
 
 export const zDeleteAccountResponse = z.void();
@@ -72,12 +62,15 @@ export const zCreateAccountResponse = zSingleAccountResponseBody;
 
 export const zHealthCheckResponse = zHealthCheckOutputBody;
 
-export const zGetProjectsByOwnerIdResponse = zMultipleProjectResponseBody;
+export const zCreateProjectResponse = zProject;
 
-export const zCreateProjectResponse = zSingleProjectResponseBody;
+export const zGetAccountProjectsResponse = z.union([
+  z.array(zProject),
+  z.null(),
+]);
 
 export const zDeleteProjectResponse = z.void();
 
-export const zGetProjectByIdResponse = zSingleProjectResponseBody;
+export const zGetProjectByIdResponse = zProject;
 
 export const zUpdateProjectResponse = z.void();

@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"api/internal/entities/project"
+	"api/internal/server/handler/shared"
 	"api/internal/server/utils"
 	"api/internal/service"
 
@@ -34,12 +35,14 @@ func newProjectHandler(service *service.Service, logger *zap.Logger) *projectHan
 }
 
 type singleProjectResponse struct {
-	Body struct {
-		Project project.Project `json:"project"`
-	}
+	Body project.Project
 }
 
-func (h *projectHandler) create(ctx context.Context, input *project.CreateProjectParams) (*singleProjectResponse, error) {
+type createProjectRequest struct {
+	Body project.CreateProjectParams
+}
+
+func (h *projectHandler) create(ctx context.Context, input *createProjectRequest) (*singleProjectResponse, error) {
 	account := utils.GetAuthenticatedAccount(ctx)
 	if account == nil {
 		return nil, huma.Error401Unauthorized("Unauthorized")
@@ -55,19 +58,19 @@ func (h *projectHandler) create(ctx context.Context, input *project.CreateProjec
 		return nil, huma.Error403Forbidden("You are not authorized to create a project")
 	}
 
-	project, err := h.service.ProjectService.Create(ctx, account.ID, *input)
+	project, err := h.service.ProjectService.Create(ctx, account.ID, input.Body)
 	if err != nil {
 		h.logger.Error("failed to create project", zap.Error(err))
 		return nil, huma.Error500InternalServerError("An error occurred while creating the project")
 	}
 
 	resp := &singleProjectResponse{}
-	resp.Body.Project = project
+	resp.Body = project
 
 	return resp, nil
 }
 
-func (h *projectHandler) getById(ctx context.Context, input *struct{ ID int32 }) (*singleProjectResponse, error) {
+func (h *projectHandler) getById(ctx context.Context, input *shared.IdPathParam) (*singleProjectResponse, error) {
 	account := utils.GetAuthenticatedAccount(ctx)
 	if account == nil {
 		return nil, huma.Error401Unauthorized("Unauthorized")
@@ -95,15 +98,13 @@ func (h *projectHandler) getById(ctx context.Context, input *struct{ ID int32 })
 	}
 
 	resp := &singleProjectResponse{}
-	resp.Body.Project = project
+	resp.Body = project
 
 	return resp, nil
 }
 
 type multipleProjectResponse struct {
-	Body struct {
-		Projects []project.Project `json:"projects"`
-	}
+	Body []project.Project
 }
 
 func (h *projectHandler) getByOwnerId(ctx context.Context, input *struct{}) (*multipleProjectResponse, error) {
@@ -119,15 +120,17 @@ func (h *projectHandler) getByOwnerId(ctx context.Context, input *struct{}) (*mu
 	}
 
 	resp := &multipleProjectResponse{}
-	resp.Body.Projects = projects
+	resp.Body = projects
 
 	return resp, nil
 }
 
-func (h *projectHandler) update(ctx context.Context, input *struct {
-	ID     int32
-	Params project.UpdateProjectParams
-}) (*struct{}, error) {
+type updateProjectRequest struct {
+	shared.IdPathParam
+	Body project.UpdateProjectParams
+}
+
+func (h *projectHandler) update(ctx context.Context, input *updateProjectRequest) (*struct{}, error) {
 	account := utils.GetAuthenticatedAccount(ctx)
 	if account == nil {
 		return nil, huma.Error401Unauthorized("Unauthorized")
@@ -154,7 +157,7 @@ func (h *projectHandler) update(ctx context.Context, input *struct {
 		return nil, huma.Error403Forbidden("You are not authorized to update this project")
 	}
 
-	err = h.service.ProjectService.Update(ctx, input.ID, input.Params)
+	err = h.service.ProjectService.Update(ctx, input.ID, input.Body)
 	if err != nil {
 		h.logger.Error("failed to update project", zap.Error(err))
 		return nil, huma.Error500InternalServerError("An error occurred while updating the project")
@@ -163,7 +166,7 @@ func (h *projectHandler) update(ctx context.Context, input *struct {
 	return &struct{}{}, nil
 }
 
-func (h *projectHandler) delete(ctx context.Context, input *struct{ ID int32 }) (*struct{}, error) {
+func (h *projectHandler) delete(ctx context.Context, input *shared.IdPathParam) (*struct{}, error) {
 	account := utils.GetAuthenticatedAccount(ctx)
 	if account == nil {
 		return nil, huma.Error401Unauthorized("Unauthorized")
