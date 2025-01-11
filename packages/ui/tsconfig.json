@@ -1,0 +1,14 @@
+{
+	"extends": "@repo/typescript-config/react-library.json",
+	"compilerOptions": {
+		"outDir": "dist",
+		"baseUrl": ".",
+		"paths": {
+			"@repo/ui/*": ["src/*"]
+		},
+		"resolveJsonModule": true,
+		"esModuleInterop": true
+	},
+	"include": [".", "src/icons.tsx"],
+	"exclude": ["node_modules", "dist"]
+}
