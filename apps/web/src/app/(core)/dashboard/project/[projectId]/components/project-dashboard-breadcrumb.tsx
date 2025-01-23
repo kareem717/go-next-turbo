@@ -16,9 +16,16 @@ import {
 import { ChevronDownIcon } from "lucide-react"
 import { redirects } from "@/lib/config/redirects";
 import { useProject } from "@/components/providers/project-provider";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function ProjectDashboardBreadcrumb() {
   const { selectedProject, projects } = useProject();
+  const pathname = usePathname();
+
+  const generatePath = (projectId: number): string => {
+    return pathname.replace(/\/project\/\d+/, `/project/${projectId}`);
+  }
 
   return (
     <Breadcrumb>
@@ -37,8 +44,10 @@ export function ProjectDashboardBreadcrumb() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
               {projects.map((project) => (
-                <DropdownMenuItem key={project.id}>
-                  {project.name}
+                <DropdownMenuItem key={project.id} asChild>
+                  <Link href={generatePath(project.id)}>
+                    {project.name}
+                  </Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
